@@ -31,18 +31,20 @@ class MessageController extends Controller
 		curl_close($ch);
         //return View::make('message.message');
 		$agent = new Agent();
-        /*if ($agent->isDesktop())
-            return 'desktop';
+        $browser = $agent->browser();
+        $bversion = $agent->version($browser);
+        $platform = $agent->platform();
+        $pversion = $agent->version($platform);
+        $info = 'browser: ' . $browser . '<br/>' . 'browser_version: ' . $bversion .
+            '<br/>platform: ' . $platform . '<br/>platform_version: ' . $pversion;
+        if ($platform == 'iOS' && $browser == 'Safari' && intval($bversion) < 10)
+        {
+            return '辣鸡浏览器！<br/>' . $info;
+        }
         else
-        {*/
-            $browser = $agent->browser();
-            $bversion = $agent->version($browser);
-
-            $platform = $agent->platform();
-            $pversion = $agent->version($platform);
-            return 'browser: ' . $browser . '<br/>' . 'browser_version: ' . $bversion .
-                '<br/>platform: ' . $platform . '<br/>platform_version: ' . $pversion;
-        //}
+        {
+            return '浏览器兼容性检测通过！<br/>' . $info;
+        }
     }
 
     public function getHistoryMessage(Request $request)
