@@ -3,21 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SendMessageRequest;
-use App\UserInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Database\Eloquent\Collection;
-use App\GoodCat;
-use App\GoodInfo;
-use App\Transaction;
-use App\TransactionLog;
 use App\Message;
 use App\User;
 use App\MessageContact;
 use App\Http\Controllers\Controller;
+use Jenssegers\Agent\Agent;
 
 class MessageController extends Controller
 {
@@ -33,7 +29,20 @@ class MessageController extends Controller
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
 		$output = curl_exec($ch);
 		curl_close($ch);
-        return View::make('message.message');
+        //return View::make('message.message');
+		$agent = new Agent();
+        /*if ($agent->isDesktop())
+            return 'desktop';
+        else
+        {*/
+            $browser = $agent->browser();
+            $bversion = $agent->version($browser);
+
+            $platform = $agent->platform();
+            $pversion = $agent->version($platform);
+            return 'browser: ' . $browser . '<br/>' . 'browser_version: ' . $bversion .
+                '<br/>platform: ' . $platform . '<br/>platform_version: ' . $pversion;
+        //}
     }
 
     public function getHistoryMessage(Request $request)
