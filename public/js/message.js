@@ -295,10 +295,12 @@ Vue.component('message-dialog', {
 var Message = new Vue({
     el: '#message',
     data: {
-        timer: null
+        timer: null,
+        errorTimer: null
     },
     methods: {
         startLoop: function () {
+            $("#change-browser-tip").remove();
             var vm = this;
             vm.loadContact();
             vm.timer = window.setInterval(function() {
